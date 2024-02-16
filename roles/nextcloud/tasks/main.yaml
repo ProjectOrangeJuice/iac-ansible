@@ -10,21 +10,30 @@
   file:
     path: /home/nextcloud/nc
     state: directory
+    owner: nextcloud
+    group: nextcloud
+    state: directory
 
 - name: Create nextcloud data folder
   file:
     path: /home/nextcloud/nc/data
     state: directory
+    owner: nextcloud
+    group: nextcloud
 
 - name: Create nextcloud data folder
   file:
     path: /home/nextcloud/nc/backup
     state: directory
+    owner: nextcloud
+    group: nextcloud
 
 - name: Copy docker-compose.yaml file
   copy:
     src: docker-compose.yaml
     dest: /home/nextcloud/nc/docker-compose.yaml
+    owner: nextcloud
+    group: nextcloud
 
 - name: Run Docker Compose
   community.docker.docker_compose:
