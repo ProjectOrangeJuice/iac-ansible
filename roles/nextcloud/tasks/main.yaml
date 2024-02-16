@@ -1,0 +1,32 @@
+---
+- name: Create nextcloud user
+  user:
+    name: nextcloud
+    state: present
+    createhome: yes
+
+- name: Create nextcloud folders
+  file:
+    path: /home/nextcloud/nc
+    state: directory
+
+- name: Create nextcloud data folder
+  file:
+    path: /home/nextcloud/nc/data
+    state: directory
+
+- name: Create nextcloud data folder
+  file:
+    path: /home/nextcloud/nc/backup
+    state: directory
+
+- name: Copy docker-compose.yaml file
+  copy:
+    src: docker-compose.yaml
+    dest: /home/nextcloud/nc/docker-compose.yaml
+
+- name: Run Docker Compose
+  community.docker.docker_compose:
+    project_src: /home/nextcloud/nc
+  become: yes
+  become_user: nextcloud
