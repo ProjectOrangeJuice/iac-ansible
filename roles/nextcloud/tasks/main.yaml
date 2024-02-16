@@ -3,6 +3,7 @@
   user:
     name: nextcloud
     state: present
+    groups: docker
     createhome: yes
 
 - name: Create nextcloud folders
