@@ -1,6 +1,7 @@
 - hosts: nextcloud
   user: root
   roles:
+    - guest-agent
     - docker
     - nextcloud
   
