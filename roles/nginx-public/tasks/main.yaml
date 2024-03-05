@@ -1,0 +1,54 @@
+---
+- name: Install required packages
+  apt:
+    name:
+      - nginx
+      - certbot
+      - python3-certbot-nginx
+      - wget
+      - curl
+      - fail2ban
+    state: present
+
+- name: Remove default nginx configuration
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx
+
+- name: Copy nginx conf
+  template:
+    src: public_reverse.conf.j2
+    dest: /etc/nginx/sites-enabled/reverse.conf
+  notify: restart nginx
+
+- name: test nginx config
+  shell: nginx -t
+
+
+- name: Copy log config
+  copy:
+    src: log.conf
+    dest: /etc/nginx/conf.d/log.conf
+  notify: restart nginx
+  
+
+- name: Check if ngxblocker installation script exists
+  stat:
+    path: /usr/local/sbin/install-ngxblocker
+  register: ngxblocker_script
+
+- name: download ngnixblocker
+  get_url:
+    url: https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/install-ngxblocker
+    dest: /usr/local/sbin/install-ngxblocker
+    mode: 0755
+  when: ngxblocker_script.stat.exists == False
+
+- name: Install ngxblocker
+  shell: /usr/local/sbin/install-ngxblocker -x
+  when: ngxblocker_script.stat.exists == False
+
+- name: Update ngxblocker
+  shell: /usr/local/sbin/update-ngxblocker -x
+  when: ngxblocker_script.stat.exists == True

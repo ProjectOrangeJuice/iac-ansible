@@ -1,0 +1,27 @@
+---
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Remove default nginx configuration
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx
+
+- name: Copy log config
+  copy:
+    src: log.conf
+    dest: /etc/nginx/conf.d/log.conf
+  notify: restart nginx
+
+- name: Copy nginx conf
+  copy:
+    src: lan_reverse.conf
+    dest: /etc/nginx/sites-enabled/reverse.conf
+  notify: restart nginx
+
+- name: test nginx config
+  shell: nginx -t
+
