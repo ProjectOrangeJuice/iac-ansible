@@ -196,4 +196,16 @@
     <location>/var/log/dpkg.log</location>
   </localfile>
 
+  <localfile>
+    <location>/mnt/ncdata/nextcloud.log</location>
+    <log_format>json</log_format>
+    <label key="@source">NextCloud</label>
+  </localfile>
+
+   <localfile>
+    <location>/mnt/ncdata/audit.log</location>
+    <log_format>json</log_format>
+    <label key="@source">NextCloud-Audit</label>
+  </localfile>
+
 </ossec_config>

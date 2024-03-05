@@ -5,4 +5,11 @@
     - guest-agent
     - docker
     - nextcloud
+    - wazuh-agent
   
+
+- hosts: wazuh
+  user: root
+  roles:
+    - upgrader
+    - wazuh
