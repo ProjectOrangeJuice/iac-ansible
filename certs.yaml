@@ -8,7 +8,7 @@
     register: ssl_cert_exists
 
   - name: Generate
-    shell: certbot certonly --nginx --non-interactive --agree-tos --email cert@{{ domain_name }} --domains cloud.{{ domain_name }}
+    shell: certbot certonly --nginx --non-interactive --agree-tos --email cert@{{ domain_name }} --domains data.{{ domain_name }}
     when: not ssl_cert_exists.stat.exists
 
   - name: Generate
