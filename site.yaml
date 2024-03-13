@@ -12,7 +12,7 @@
   user: root
   roles:
     - upgrader
-    - wazuh
+    - wazuhMaster
 
 - hosts: publicNginx
   user: root
