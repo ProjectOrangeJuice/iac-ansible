@@ -20,7 +20,7 @@
     - priv-vars.yaml
   roles:
     - upgrader
-    - wazuh
+    - wazuh-agent
     - nginx-public
 
 - hosts: lanNginx
@@ -29,5 +29,5 @@
     - priv-vars.yaml
   roles:
     - upgrader
-    - wazuh
+    - wazuh-agent
     - nginx-local
