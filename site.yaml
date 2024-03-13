@@ -13,3 +13,21 @@
   roles:
     - upgrader
     - wazuh
+
+- hosts: publicNginx
+  user: root
+  vars_files:
+    - priv-vars.yaml
+  roles:
+    - upgrader
+    - wazuh
+    - nginx-public
+
+- hosts: lanNginx
+  user: root
+  vars_files:
+    - priv-vars.yaml
+  roles:
+    - upgrader
+    - wazuh
+    - nginx-local

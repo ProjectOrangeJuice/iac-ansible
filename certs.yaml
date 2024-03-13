@@ -1,6 +1,20 @@
 - hosts: publicNginx
   user: root
+  vars_files:
+    - priv-vars.yaml
   tasks:
+
+  - name: Install required packages
+    apt:
+      name:
+        - nginx
+        - certbot
+        - python3-certbot-nginx
+        - wget
+        - curl
+      state: present
+
+
   - name: Check if SSL certificate exists
     stat:
       path: "/etc/letsencrypt/live/unlock.{{ domain_name }}/fullchain.pem"
