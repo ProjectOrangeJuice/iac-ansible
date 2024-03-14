@@ -1,4 +1,15 @@
 ---
+- name: Get key for nginx repo
+  apt_key:
+    url: https://nginx.org/keys/nginx_signing.key
+    state: present
+
+- name: Add nginx repo
+  apt_repository:
+    repo: deb http://nginx.org/packages/mainline/ubuntu/ jammy nginx
+    state: present
+    update_cache: yes
+
 - name: Install required packages
   apt:
     name:
@@ -19,7 +30,7 @@
 - name: Copy nginx conf
   template:
     src: public_reverse.conf.j2
-    dest: /etc/nginx/sites-enabled/reverse.conf
+    dest: /etc/nginx/conf.d/reverse.conf
   notify: restart nginx
 
 - name: test nginx config
@@ -50,5 +61,5 @@
   when: ngxblocker_script.stat.exists == False
 
 - name: Update ngxblocker
-  shell: /usr/local/sbin/update-ngxblocker -x
+  shell: /usr/local/sbin/update-ngxblocker 
   when: ngxblocker_script.stat.exists == True
