@@ -31,3 +31,12 @@
     - upgrader
     - wazuh-agent
     - nginx-local
+
+- hosts: gateway
+  user: root
+  vars_files:
+    - priv-vars.yaml
+  roles:
+    - upgrader
+    - wazuh-agent
+    - gateway
