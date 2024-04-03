@@ -16,7 +16,7 @@
 - name: Copy docker-compose.yaml file
   copy:
     src: docker-compose.yaml
-    dest: /home/vault/nc/docker-compose.yaml
+    dest: /home/vault/bit/docker-compose.yaml
     owner: vault
     group: vault
 
