@@ -40,3 +40,11 @@
     - upgrader
     - wazuh-agent
     - gateway
+
+- hosts: vault
+  user: root
+  roles:
+    - upgrader
+    - docker
+    - vault
+    - wazuh-agent

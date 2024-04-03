@@ -1,0 +1,27 @@
+---
+- name: Create vault user
+  user:
+    name: vault
+    state: present
+    groups: docker
+    createhome: yes
+
+- name: Create vault folders
+  file:
+    path: /home/vault/bit
+    state: directory
+    owner: vault
+    group: vault
+
+- name: Copy docker-compose.yaml file
+  copy:
+    src: docker-compose.yaml
+    dest: /home/vault/nc/docker-compose.yaml
+    owner: vault
+    group: vault
+
+- name: Run Docker Compose
+  community.docker.docker_compose:
+    project_src: /home/vault/nc
+  become: true
+  become_user: vault

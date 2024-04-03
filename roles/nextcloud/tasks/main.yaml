@@ -12,7 +12,6 @@
     state: directory
     owner: nextcloud
     group: nextcloud
-    state: directory
 
 - name: Create nextcloud data folder
   file:
@@ -38,5 +37,5 @@
 - name: Run Docker Compose
   community.docker.docker_compose:
     project_src: /home/nextcloud/nc
-  become: yes
+  become: true
   become_user: nextcloud

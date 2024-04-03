@@ -1,0 +1,12 @@
+version: '3'
+services:
+    bit:
+        image: vaultwarden/server:latest
+        environment:
+          LOG_FILE: "/data/logger.txt"
+          ADMIN_TOKEN:
+        volumes:
+            - ./data/:/data
+        ports:
+            - "80:80"
+        restart: always
