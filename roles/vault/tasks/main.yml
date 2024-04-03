@@ -22,6 +22,6 @@
 
 - name: Run Docker Compose
   community.docker.docker_compose:
-    project_src: /home/vault/nc
+    project_src: /home/vault/bit
   become: true
   become_user: vault
