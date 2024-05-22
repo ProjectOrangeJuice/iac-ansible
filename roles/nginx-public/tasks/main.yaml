@@ -63,3 +63,15 @@
 - name: Update ngxblocker
   shell: /usr/local/sbin/update-ngxblocker 
   when: ngxblocker_script.stat.exists == True
+
+- name: Uncomment server_tokens line if it exists in nginx.conf
+  ansible.builtin.lineinfile:
+    path: /etc/nginx/nginx.conf
+    regexp: '^[[:space:]]*# server_tokens off;'
+    line: 'server_tokens off;'
+    backrefs: yes  # Enable backreferences in the regexp
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted
