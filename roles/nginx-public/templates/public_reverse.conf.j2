@@ -34,9 +34,9 @@ server {
 resolver 192.168.18.1 valid=30s;
 
 upstream backend {
-   server homeassistant.localdomain;
-   server gateway.localdomain;
-   server data.localdomain;
+   server homeassistant.local;
+   server gateway.local;
+   server data.local;
    keepalive 10;
 }
 
@@ -52,7 +52,7 @@ server {
     auth_request /gateway;
         location = /gateway {
         # This address is where the gateway will be listening on
-        proxy_pass http://gateway.localdomain:9090/access;
+        proxy_pass http://gateway.local:9090/access;
         proxy_set_header Host $host;
         proxy_pass_request_body off; # no need to send the POST body
         proxy_set_header Content-Length "";
@@ -98,7 +98,7 @@ server {
   limit_req zone=mylimit;
         location  / {
 
-            proxy_pass         http://gateway.localdomain:9090/unlock;
+            proxy_pass         http://gateway.local:9090/unlock;
             proxy_redirect     off;
             proxy_set_header   Host $host;
             proxy_set_header   X-Real-IP $remote_addr;
@@ -124,7 +124,7 @@ server {
     
         location = /gateway {
         # This address is where the gateway will be listening on
-        proxy_pass http://gateway.localdomain:9090/access;
+        proxy_pass http://gateway.local:9090/access;
         proxy_pass_request_body off; # no need to send the POST body
         proxy_set_header Host $host;
         proxy_set_header Content-Length "";
@@ -145,7 +145,7 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 86400;
-        proxy_pass         http://homeassistant.localdomain:8123;
+        proxy_pass         http://homeassistant.local:8123;
         proxy_redirect     off;
         proxy_set_header   Host $host;
         proxy_set_header   X-Real-IP $remote_addr;
@@ -158,7 +158,7 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 86400;
-        proxy_pass         http://homeassistant.localdomain:8123;
+        proxy_pass         http://homeassistant.local:8123;
         proxy_redirect     off;
         proxy_set_header   Host $host;
         proxy_set_header   X-Real-IP $remote_addr;
@@ -193,7 +193,7 @@ gzip_types text/plain text/css application/json application/javascript text/xml 
         location = /gateway {
         client_max_body_size 0;
         # This address is where the gateway will be listening on
-        proxy_pass http://gateway.localdomain:9090/access;
+        proxy_pass http://gateway.local:9090/access;
         proxy_set_header Host $host;
         proxy_pass_request_body off; # no need to send the POST body
         proxy_set_header Content-Length "";
@@ -210,7 +210,7 @@ gzip_types text/plain text/css application/json application/javascript text/xml 
    
     
     location / {
-        proxy_pass http://data.localdomain:11000$request_uri;
+        proxy_pass http://data.local:11000$request_uri;
 
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Port $server_port;
