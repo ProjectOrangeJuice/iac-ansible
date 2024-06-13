@@ -21,11 +21,11 @@
       follow: yes
     register: ssl_cert_exists
 
-  - name: Generate
+  - name: Generate data
     shell: certbot certonly --nginx --non-interactive --agree-tos --email cert@{{ domain_name }} --domains data.{{ domain_name }}
     when: not ssl_cert_exists.stat.exists
 
-  - name: Generate
+  - name: Generate bit
     shell: certbot certonly --nginx --non-interactive --agree-tos --email cert@{{ domain_name }} --domains bit.{{ domain_name }}
     when: not ssl_cert_exists.stat.exists
 
@@ -34,13 +34,18 @@
     pause:
       seconds: 10
 
-  - name: Generate
+  - name: Generate home
     shell: certbot certonly --nginx --non-interactive --agree-tos --email cert@{{ domain_name }} --domains home.{{ domain_name }}
     when: not ssl_cert_exists.stat.exists
 
-  - name: Generate
+  - name: Generate unlock
     shell: certbot certonly --nginx --non-interactive --agree-tos --email cert@{{ domain_name }} --domains unlock.{{ domain_name }}
     when: not ssl_cert_exists.stat.exists
+
+  - name: Generate gemini
+    shell: certbot certonly --nginx --non-interactive --agree-tos --email cert@{{ domain_name }} --domains gemini.{{ domain_name }}
+    when: not ssl_cert_exists.stat.exists
+
 
   - name: Renew SSL certificate
     shell: certbot renew --non-interactive
