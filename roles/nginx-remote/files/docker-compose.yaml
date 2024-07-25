@@ -1,0 +1,12 @@
+services:
+  project-nginx:
+    build:
+      context: .  # Look for the Dockerfile in the current directory
+      dockerfile: Dockerfile  # Optional if named Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /home/oharris/nginx/sites-enabled:/etc/nginx/sites-enabled
+      - /home/oharris/nginx/certs:/etc/letsencrypt/
+      - /var/log/nginx:/var/log/nginx

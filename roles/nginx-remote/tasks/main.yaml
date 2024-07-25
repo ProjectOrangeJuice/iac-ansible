@@ -1,0 +1,51 @@
+- name: Add user to docker group
+  user:
+    name: oharris
+    groups: docker
+    append: yes
+
+- name: Create directory for nginx
+  file:
+    path: /home/oharris/nginx
+    state: directory
+    owner: oharris
+    group: oharris
+
+- name: Create directory for nginx
+  file:
+    path: /home/oharris/nginx/sites-enabled
+    state: directory
+    owner: oharris
+    group: oharris
+
+- name: Copy dockerfile file
+  copy:
+    src: dockerfile
+    dest: /home/oharris/nginx/Dockerfile
+    owner: oharris
+    group: oharris
+
+- name: Copy docker compose file
+  copy:
+    src: docker-compose.yaml
+    dest: /home/oharris/nginx/docker-compose.yaml
+    owner: oharris
+    group: oharris
+
+- name: Copy nginx conf
+  template:
+    src: public_reverse.conf.j2
+    dest: /home/oharris/nginx/sites-enabled/reverse.conf
+    owner: oharris
+    group: oharris
+
+- name: Stop Docker Compose
+  shell: docker compose down
+  args:
+    chdir: /home/oharris/nginx
+
+- name: Run Docker Compose
+  shell: docker compose up -d --build
+  args:
+    chdir: /home/oharris/nginx
+
