@@ -48,3 +48,12 @@
     - docker
     - vault
     - wazuh-agent
+
+- hosts: remote
+  user: oharris
+  become: yes
+  roles:
+    - upgrader
+    - wazuh-agent
+  vars:
+    wazuh_address: 192.168.2.5
