@@ -2,15 +2,14 @@ FROM nginx
 
 RUN sed -i 's/server_tokens on;/server_tokens off;/' /etc/nginx/nginx.conf
 
-RUN apt-get install -y ca-certificates
-
-COPY cert.crt /usr/local/share/ca-certificates/
-RUN update-ca-certificates
-
 RUN apt update
 RUN apt upgrade -y
 
-RUN apt install python3-certbot-nginx fail2ban wget -y
+
+COPY cert.crt /etc/ssl/
+COPY key.key /etc/ssl/
+
+RUN apt install fail2ban wget -y
 RUN wget -O ngxblocker.sh https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/install-ngxblocker; bash ./ngxblocker.sh -x
 
 RUN rm /etc/nginx/conf.d/default.conf

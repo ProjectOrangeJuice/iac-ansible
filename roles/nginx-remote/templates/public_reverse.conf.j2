@@ -1,10 +1,10 @@
 upstream backend {
-    server 192.168.2.10 max_fails=0 fail_timeout=0;  
+    server 192.168.2.15:443 max_fails=0 fail_timeout=0;  
 }
 
 # Domain to backend mapping
 map $host $upstream_backend {
-    gemini.{{ domain_name }} http://backend;
+    gemini.{{ domain_name }} https://backend;
 }
 
 

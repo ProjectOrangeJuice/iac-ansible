@@ -1,1 +1,4 @@
 priv-vars.yaml
+roles/nginx-remote/files/cert.crt
+roles/nginx-tunneled/files/key.key
+roles/nginx-tunneled/files/cert.crt

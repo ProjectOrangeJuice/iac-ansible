@@ -23,6 +23,19 @@
     - wazuh-agent
     - nginx-public
 
+- hosts: tunnel-nginx
+  user: oharris
+  become: true
+  become_user: root
+  vars_files:
+    - priv-vars.yaml
+  roles:
+    - upgrader
+    - guest-agent
+    - wazuh-agent
+    - docker
+    - nginx-tunneled
+
 - hosts: lanNginx
   user: root
   vars_files:

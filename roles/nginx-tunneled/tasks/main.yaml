@@ -34,8 +34,15 @@
 
 - name: Copy nginx conf
   template:
-    src: public_reverse.conf.j2
+    src: tunneled.j2
     dest: /home/oharris/nginx/sites-enabled/reverse.conf
+    owner: oharris
+    group: oharris
+
+- name: Copy nginx key
+  copy:
+    src: key.key
+    dest: /home/oharris/nginx/key.key
     owner: oharris
     group: oharris
 
@@ -52,6 +59,8 @@
     chdir: /home/oharris/nginx
 
 - name: Run Docker Compose
+  become: true
+  become_user: oharris
   shell: docker compose up -d --build
   args:
     chdir: /home/oharris/nginx

@@ -6,8 +6,8 @@ config
 
 
 [Interface]
-Address = 192.168.2.10/32
-PrivateKey = 
+Address = 192.168.2.15/32
+PrivateKey =
 
 [Peer]
 PublicKey = 
