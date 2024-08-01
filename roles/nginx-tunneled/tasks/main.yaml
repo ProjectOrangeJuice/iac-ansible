@@ -53,15 +53,8 @@
     owner: oharris
     group: oharris
 
-- name: Stop Docker Compose
-  shell: docker compose down
-  args:
-    chdir: /home/oharris/nginx
-
-- name: Run Docker Compose
-  become: true
-  become_user: oharris
-  shell: docker compose up -d --build
-  args:
-    chdir: /home/oharris/nginx
-
+- name: Start docker Compose
+  community.docker.docker_compose_v2:
+    project_src: /home/oharris/nginx
+    state: restarted
+    build: always

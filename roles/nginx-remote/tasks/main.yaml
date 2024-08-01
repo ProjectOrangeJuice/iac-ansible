@@ -18,6 +18,15 @@
     owner: oharris
     group: oharris
 
+- name: Copy gateway docker image
+  copy:
+    src: gatewayDocker
+    dest: /home/oharris/nginx/image
+    mode: +x
+
+- name: Import docker image
+  shell: docker load -i /home/oharris/nginx/image 
+
 - name: Copy dockerfile file
   copy:
     src: dockerfile
@@ -26,7 +35,7 @@
     group: oharris
 
 - name: Copy docker compose file
-  copy:
+  template:
     src: docker-compose.yaml
     dest: /home/oharris/nginx/docker-compose.yaml
     owner: oharris
@@ -46,13 +55,8 @@
     owner: oharris
     group: oharris
 
-- name: Stop Docker Compose
-  shell: docker compose down
-  args:
-    chdir: /home/oharris/nginx
-
-- name: Run Docker Compose
-  shell: docker compose up -d --build
-  args:
-    chdir: /home/oharris/nginx
-
+- name : Start docker Compose
+  community.docker.docker_compose_v2:
+    project_src: /home/oharris/nginx
+    state: restarted
+    build: always

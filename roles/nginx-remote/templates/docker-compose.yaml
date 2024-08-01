@@ -10,3 +10,9 @@ services:
       - /home/oharris/nginx/sites-enabled:/etc/nginx/sites-enabled
       - /home/oharris/nginx/certs:/etc/letsencrypt/
       - /var/log/nginx:/var/log/nginx
+  project-gateway:
+    image: gateway
+    ports:
+      - 9090:9090
+    environment:
+      GATEWAY_PASSWORD: {{ gateway_password }}

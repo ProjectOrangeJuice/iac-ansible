@@ -13,12 +13,12 @@ server {
 
 resolver 192.168.18.1 valid=30s;
 
-upstream backend {
-   server homeassistant.local;
-   server gateway.local;
-   server data.local;
-   keepalive 10;
-}
+# upstream backend {
+#    server homeassistant.local max_fails=0 fail_timeout=0; 
+#    server gateway.local max_fails=0 fail_timeout=0; 
+#    server data.local max_fails=0 fail_timeout=0; 
+#    server gemini-webfront.local max_fails=0 fail_timeout=0; 
+# }
 
 limit_req_zone $binary_remote_addr zone=mylimit:5m rate=50r/s;
 limit_req_zone $binary_remote_addr zone=highlimit:5m rate=250r/s;
@@ -34,22 +34,7 @@ server {
 
     client_max_body_size 1m;
     limit_req zone=mylimit burst=20;
-    auth_request /gateway;
-        location = /gateway {
-        # This address is where the gateway will be listening on
-        proxy_pass http://gateway.local:9090/access;
-        proxy_set_header Host $host;
-        proxy_pass_request_body off; # no need to send the POST body
-        proxy_set_header Content-Length "";
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-    error_page 401 = @error401;
-    location @error401 {
-        return 404;
-    }
-
+   
     location  / {
         proxy_pass         http://192.168.18.100;
                proxy_http_version 1.1;
@@ -82,22 +67,9 @@ server {
     set_real_ip_from 192.168.2.1; 
     real_ip_header X-Forwarded-For;
 
-    auth_request /gateway;
-        location = /gateway {
-        # This address is where the gateway will be listening on
-        proxy_pass http://gateway.local:9090/access;
-        proxy_set_header Host $host;
-        proxy_pass_request_body off; # no need to send the POST body
-        proxy_set_header Content-Length "";
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-    error_page 401 = @error401;
-    location @error401 {
-        return 404;
-    }
-
     location  / {
+        proxy_connect_timeout 1s;  # Short initial connection timeout
+        proxy_next_upstream error timeout; # Retry on errors and timeouts
         proxy_pass         http://gemini-webfront.local:9090;
                proxy_http_version 1.1;
     # Set headers for proxying WebSocket
@@ -123,7 +95,7 @@ server {
 
 
 server {
-  server_name unlock.{{ domain_name }};
+  server_name audit.{{ domain_name }};
 
     #   Ignore the tunnel ip
     set_real_ip_from 192.168.2.1; 
@@ -132,7 +104,7 @@ server {
   limit_req zone=mylimit;
         location  / {
 
-            proxy_pass         http://gateway.local:9090/unlock;
+            proxy_pass         http://192.168.2.1:9090/audit;
             proxy_redirect     off;
             proxy_set_header   Host $host;
             proxy_set_header   X-Real-IP $remote_addr;
@@ -142,11 +114,7 @@ server {
         }
 
 
-    listen 443 ssl; 
-    ssl_certificate /etc/ssl/cert.crt; 
-    ssl_certificate_key /etc/ssl/key.key;
-
-
+    listen 80; 
 }
 
 
@@ -156,20 +124,7 @@ server {
     # Ignore the tunnel ip
     set_real_ip_from 192.168.2.1; 
     real_ip_header X-Forwarded-For;
-        location = /gateway {
-        # This address is where the gateway will be listening on
-        proxy_pass http://gateway.local:9090/access;
-        proxy_pass_request_body off; # no need to send the POST body
-        proxy_set_header Host $host;
-        proxy_set_header Content-Length "";
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-    error_page 401 = @error401;
-    location @error401 {
-        return 404;
-    }
+
 
     location  /auth/login_flow {
         limit_req zone=mylimit burst=5;
@@ -225,25 +180,6 @@ gzip_types text/plain text/css application/json application/javascript text/xml 
 
    # Compression level: a number between 1 (least compression) and 9 (most compression)
    gzip_comp_level 9;
-   auth_request /gateway;
-        location = /gateway {
-        client_max_body_size 0;
-        # This address is where the gateway will be listening on
-        proxy_pass http://gateway.local:9090/access;
-        proxy_set_header Host $host;
-        proxy_pass_request_body off; # no need to send the POST body
-        proxy_set_header Content-Length "";
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        
-    }
-    error_page 401 = @error401;
-    location @error401 {
-        return 404;
-    }
-
-   
     
     location / {
         proxy_pass http://data.local:11000$request_uri;

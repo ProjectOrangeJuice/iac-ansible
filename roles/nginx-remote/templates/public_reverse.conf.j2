@@ -2,9 +2,17 @@ upstream backend {
     server 192.168.2.15:443 max_fails=0 fail_timeout=0;  
 }
 
+upstream gateway {
+    server nginx-project-gateway-1:9090;
+}
+
+
 # Domain to backend mapping
 map $host $upstream_backend {
     gemini.{{ domain_name }} https://backend;
+    bit.{{ domain_name }} https://backend;
+    home.{{ domain_name }} https://backend;
+    data.{{ domain_name }} https://backend;
 }
 
 
@@ -49,8 +57,19 @@ limit_conn_zone $binary_remote_addr zone=limitconnbyaddr:20m;
 server {
     server_name gemini.{{ domain_name }};
     limit_req zone=mylimit burst=20;
+
+    auth_request /gateway;
+        location = /gateway {
+        # This address is where the gateway will be listening on
+        proxy_pass http://nginx-project-gateway-1:9090/access;
+        proxy_set_header Host $host;
+        proxy_pass_request_body off; # no need to send the POST body
+        proxy_set_header Content-Length "";
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
    
- location / {
+    location / {
         proxy_connect_timeout 1s;  # Short initial connection timeout
         proxy_next_upstream error timeout; # Retry on errors and timeouts
         proxy_pass $upstream_backend;  
@@ -66,8 +85,144 @@ server {
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
+server {
+    server_name bit.{{ domain_name }};
+    limit_req zone=mylimit burst=20;
+    
+    auth_request /gateway;
+        location = /gateway {
+        # This address is where the gateway will be listening on
+        proxy_pass http://nginx-project-gateway-1:9090/access;
+        proxy_set_header Host $host;
+        proxy_pass_request_body off; # no need to send the POST body
+        proxy_set_header Content-Length "";
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    error_page 401 = @error401;
+    location @error401 {
+        return 404;
+    }
+
+    location / {
+        proxy_connect_timeout 1s;  # Short initial connection timeout
+        proxy_next_upstream error timeout; # Retry on errors and timeouts
+        proxy_pass $upstream_backend;  
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/bit.{{ domain_name }}/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/bit.{{ domain_name }}/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    server_name home.{{ domain_name }};
+    limit_req zone=mylimit burst=20;
+   
+    auth_request /gateway;
+        location = /gateway {
+        # This address is where the gateway will be listening on
+        proxy_pass http://nginx-project-gateway-1:9090/access;
+        proxy_set_header Host $host;
+        proxy_pass_request_body off; # no need to send the POST body
+        proxy_set_header Content-Length "";
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    error_page 401 = @error401;
+    location @error401 {
+        return 404;
+    }
+
+    location / {
+        proxy_connect_timeout 1s;  # Short initial connection timeout
+        proxy_next_upstream error timeout; # Retry on errors and timeouts
+        proxy_pass $upstream_backend;  
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/home.{{ domain_name }}/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/home.{{ domain_name }}/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    server_name data.{{ domain_name }};
+    limit_req zone=mylimit burst=20;
+   
+    auth_request /gateway;
+        location = /gateway {
+        # This address is where the gateway will be listening on
+        proxy_pass http://nginx-project-gateway-1:9090/access;
+        proxy_set_header Host $host;
+        proxy_pass_request_body off; # no need to send the POST body
+        proxy_set_header Content-Length "";
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    error_page 401 = @error401;
+    location @error401 {
+        return 404;
+    }
+
+    location / {
+        proxy_connect_timeout 1s;  # Short initial connection timeout
+        proxy_next_upstream error timeout; # Retry on errors and timeouts
+        proxy_pass $upstream_backend;  
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/data.{{ domain_name }}/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/data.{{ domain_name }}/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    server_name unlock.{{ domain_name }};
+    limit_req zone=mylimit burst=2;
+   
+        location  / {
+
+            proxy_pass         http://nginx-project-gateway-1:9090/unlock;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+
+        }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/unlock.{{ domain_name }}/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/unlock.{{ domain_name }}/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
 
 
+server {
+    if ($host = unlock.{{ domain_name }}) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    server_name unlock.{{ domain_name }};
+    listen 80;
+    return 404; # managed by Certbot
+}
 
 server {
     if ($host = gemini.{{ domain_name }}) {
@@ -76,6 +231,39 @@ server {
 
 
     server_name gemini.{{ domain_name }};
+    listen 80;
+    return 404; # managed by Certbot
+}
+
+server {
+    if ($host = bit.{{ domain_name }}) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    server_name bit.{{ domain_name }};
+    listen 80;
+    return 404; # managed by Certbot
+}
+
+server {
+    if ($host = home.{{ domain_name }}) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    server_name home.{{ domain_name }};
+    listen 80;
+    return 404; # managed by Certbot
+}
+
+server {
+    if ($host = data.{{ domain_name }}) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    server_name data.{{ domain_name }};
     listen 80;
     return 404; # managed by Certbot
 }
