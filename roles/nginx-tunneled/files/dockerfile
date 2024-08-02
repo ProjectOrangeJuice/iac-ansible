@@ -3,7 +3,6 @@ FROM nginx
 RUN apt update
 RUN apt upgrade -y
 
-
 COPY cert.crt /etc/ssl/
 COPY key.key /etc/ssl/
 

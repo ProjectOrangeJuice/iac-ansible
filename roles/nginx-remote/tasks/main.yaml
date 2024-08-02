@@ -48,6 +48,13 @@
     owner: oharris
     group: oharris
 
+- name: Copy geo db
+  copy:
+    src: GeoLite2-Country_20240730.tar.gz
+    dest: /home/oharris/nginx/GeoLite2-Country_20240730.tar.gz
+    owner: oharris
+    group: oharris
+
 - name: Copy dockerfile cert file
   copy:
     src: cert.crt

@@ -3,3 +3,8 @@
   apt:
     name: qemu-guest-agent
     state: present
+
+- name: Start guest agent
+  service:
+    name: qemu-guest-agent
+    state: started

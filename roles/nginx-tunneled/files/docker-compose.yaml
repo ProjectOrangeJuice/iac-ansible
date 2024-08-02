@@ -10,3 +10,4 @@ services:
       - /home/oharris/nginx/sites-enabled:/etc/nginx/sites-enabled
       - /home/oharris/nginx/certs:/etc/letsencrypt/
       - /var/log/nginx:/var/log/nginx
+    restart: always
