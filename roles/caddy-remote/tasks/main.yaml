@@ -1,0 +1,63 @@
+- name: Add user to docker group
+  user:
+    name: oharris
+    groups: docker
+    append: yes
+
+- name: Create directory for caddy
+  file:
+    path: /home/oharris/caddy
+    state: directory
+    owner: oharris
+    group: oharris
+
+- name: Create directory for caddy config
+  file:
+    path: /home/oharris/caddy/config
+    state: directory
+    owner: oharris
+    group: oharris
+
+- name: Copy gateway docker image
+  copy:
+    src: gatewayDocker
+    dest: /home/oharris/caddy/image
+    mode: +x
+
+- name: Import docker image
+  shell: docker load -i /home/oharris/caddy/image 
+
+- name: Copy dockerfile file
+  copy:
+    src: Dockerfile
+    dest: /home/oharris/caddy/Dockerfile
+    owner: oharris
+    group: oharris
+
+- name: Copy docker compose file
+  template:
+    src: docker-compose.yaml
+    dest: /home/oharris/caddy/docker-compose.yaml
+    owner: oharris
+    group: oharris
+
+- name: Copy conf
+  template:
+    src: caddy.json
+    dest: /home/oharris/caddy/caddy.json
+    owner: oharris
+    group: oharris
+
+
+- name: Copy dockerfile cert file
+  copy:
+    src: cert.crt
+    dest: /home/oharris/caddy/cert.crt
+    owner: oharris
+    group: oharris
+
+- name : Start docker Compose
+  community.docker.docker_compose_v2:
+    project_src: /home/oharris/caddy
+    state: restarted
+    build: always

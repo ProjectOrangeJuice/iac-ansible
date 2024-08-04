@@ -14,15 +14,6 @@
     - upgrader
     - wazuhMaster
 
-- hosts: publicNginx
-  user: root
-  vars_files:
-    - priv-vars.yaml
-  roles:
-    - upgrader
-    - wazuh-agent
-    - nginx-public
-
 - hosts: tunnel-nginx
   user: oharris
   become: true
@@ -36,23 +27,19 @@
     - docker
     - nginx-tunneled
 
-- hosts: lanNginx
-  user: root
+- hosts: remote
+  user: oharris
+  become: yes
+  roles:
+   # - upgrader
+    #- wazuh-agent
+    #- docker
+    - caddy-remote
+  vars:
+    wazuh_address: 192.168.2.5
   vars_files:
     - priv-vars.yaml
-  roles:
-    - upgrader
-    - wazuh-agent
-    - nginx-local
 
-- hosts: gateway
-  user: root
-  vars_files:
-    - priv-vars.yaml
-  roles:
-    - upgrader
-    - wazuh-agent
-    - gateway
 
 - hosts: vault
   user: root
@@ -61,16 +48,3 @@
     - docker
     - vault
     - wazuh-agent
-
-- hosts: remote
-  user: oharris
-  become: yes
-  roles:
-   # - upgrader
-    - wazuh-agent
-    - docker
-    - nginx-remote
-  vars:
-    wazuh_address: 192.168.2.5
-  vars_files:
-    - priv-vars.yaml

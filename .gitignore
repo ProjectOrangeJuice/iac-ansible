@@ -6,3 +6,5 @@ roles/gateway-docker/files/gatewayDocker
 roles/nginx-remote/files/gatewayDocker
 roles/nginx-tunneled/files/GeoLite2-Country_20240730.tar.gz
 roles/nginx-remote/files/GeoLite2-Country_20240730.tar.gz
+roles/caddy-remote/files/cert.crt
+roles/caddy-remote/files/gatewayDocker
