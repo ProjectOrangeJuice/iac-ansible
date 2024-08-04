@@ -14,3 +14,4 @@ RUN wget -O ngxblocker.sh https://raw.githubusercontent.com/mitchellkrogza/nginx
 RUN rm /etc/nginx/conf.d/default.conf
 RUN sed -i '$i include /etc/nginx/sites-enabled/*.conf;' /etc/nginx/nginx.conf
 RUN sed -i '$i server_tokens off;' /etc/nginx/nginx.conf
+

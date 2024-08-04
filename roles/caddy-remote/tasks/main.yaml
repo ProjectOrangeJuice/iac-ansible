@@ -21,18 +21,21 @@
 - name: Copy gateway docker image
   copy:
     src: gatewayDocker
-    dest: /home/oharris/caddy/image
+    dest: /home/oharris/caddy/gatewayImage
     mode: +x
 
 - name: Import docker image
-  shell: docker load -i /home/oharris/caddy/image 
+  shell: docker load -i /home/oharris/caddy/gatewayImage 
 
-- name: Copy dockerfile file
+- name: Copy caddy docker image
   copy:
-    src: Dockerfile
-    dest: /home/oharris/caddy/Dockerfile
-    owner: oharris
-    group: oharris
+    src: caddyImage
+    dest: /home/oharris/caddy/caddyImage
+    mode: +x
+
+- name: Import docker caddy image
+  shell: docker load -i /home/oharris/caddy/caddyImage 
+
 
 - name: Copy docker compose file
   template:
@@ -43,21 +46,19 @@
 
 - name: Copy conf
   template:
-    src: caddy.json
-    dest: /home/oharris/caddy/caddy.json
+    src: Caddyfile
+    dest: /home/oharris/caddy/Caddyfile
     owner: oharris
     group: oharris
 
 
-- name: Copy dockerfile cert file
-  copy:
-    src: cert.crt
-    dest: /home/oharris/caddy/cert.crt
-    owner: oharris
-    group: oharris
+
+- name : Stop docker Compose
+  community.docker.docker_compose_v2:
+    project_src: /home/oharris/caddy
+    state: absent
 
 - name : Start docker Compose
   community.docker.docker_compose_v2:
     project_src: /home/oharris/caddy
-    state: restarted
-    build: always
+    state: present

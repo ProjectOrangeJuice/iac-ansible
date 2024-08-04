@@ -1,14 +1,12 @@
 services:
   project-caddy:
-    build:
-      context: .  # Look for the Dockerfile in the current directory
-      dockerfile: Dockerfile  # Optional if named Dockerfile
+    image: caddy-build
     ports:
       - 80:80
       - 443:443
     volumes:
       - /home/oharris/caddy/config:/config
-      - /home/oharris/caddy/caddy.json:/etc/caddy/Caddyfile
+      - /home/oharris/caddy/Caddyfile:/etc/caddy/Caddyfile
       - /home/oharris/caddy/data:/data
       - /var/log/caddy:/var/log/caddy
     restart: always

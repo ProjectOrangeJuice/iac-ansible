@@ -1,0 +1,104 @@
+(geo_details) {
+    maxmind_geolocation {
+        db_path "/usr/share/geoip/GeoLite2-Country_20240730/GeoLite2-Country.mmdb"
+        deny_countries GB # is actually the allow list..
+    }
+}
+
+(reverse_proxy_forward) {
+    reverse_proxy https://192.168.2.15:443 {
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
+}
+
+(gateway) {
+    forward_auth caddy-project-gateway-1:9090 {
+	    uri          /access
+        @unauth status 401
+	    replace_status @unauth 418
+    }
+}
+
+(rate_limit) {
+    rate_limit {
+    distributed
+    zone basic {
+        match {
+            method GET POST
+        }
+        key basic
+        events 60
+        window 1m
+    }
+    log_key 
+    }
+    
+}
+
+gemini.{{domain_name}} {
+    @geoblocked {
+        import geo_details
+    }
+    handle @geoblocked {
+        respond "Access denied due to your location." 403
+    }
+    
+    import rate_limit
+    import reverse_proxy_forward
+    import gateway
+}
+
+bit.{{domain_name}} {
+    @geoblocked {
+        import geo_details
+    }
+    handle @geoblocked {
+        respond "Access denied due to your location." 403
+    }
+
+    import rate_limit
+    import reverse_proxy_forward
+    import gateway
+}
+
+home.{{domain_name}} {
+    @geoblocked {
+        import geo_details
+    }
+    handle @geoblocked {
+        respond "Access denied due to your location." 403
+    }
+
+    import rate_limit
+    import reverse_proxy_forward
+    import gateway
+}
+
+data.{{domain_name}} {
+    @geoblocked {
+        import geo_details
+    }
+    handle @geoblocked {
+        respond "Access denied due to your location." 403
+    }
+
+    import rate_limit
+    import reverse_proxy_forward
+    import gateway
+}
+
+unlock.{{domain_name}} {
+    @geoblocked {
+        import geo_details
+    }
+    handle @geoblocked {
+        respond "Access denied due to your location." 403
+    }
+
+    import rate_limit
+    rewrite * /unlock
+    reverse_proxy caddy-project-gateway-1:9090 {
+    }
+}
