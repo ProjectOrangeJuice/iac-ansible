@@ -11,6 +11,13 @@
     owner: oharris
     group: oharris
 
+- name: Create directory for nginx certs
+  file:
+    path: /home/oharris/nginx/certs
+    state: directory
+    owner: oharris
+    group: oharris
+
 - name: Create directory for nginx
   file:
     path: /home/oharris/nginx/sites-enabled
@@ -42,14 +49,14 @@
 - name: Copy nginx key
   copy:
     src: key.key
-    dest: /home/oharris/nginx/key.key
+    dest: /home/oharris/nginx/certs/key.key
     owner: oharris
     group: oharris
 
 - name: Copy dockerfile cert file
   copy:
     src: cert.crt
-    dest: /home/oharris/nginx/cert.crt
+    dest: /home/oharris/nginx/certs/cert.crt
     owner: oharris
     group: oharris
 

@@ -3,9 +3,6 @@ FROM nginx
 RUN apt update
 RUN apt upgrade -y
 
-COPY cert.crt /etc/ssl/
-COPY key.key /etc/ssl/
-
 RUN apt install fail2ban wget -y
 RUN wget -O ngxblocker.sh https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/install-ngxblocker; bash ./ngxblocker.sh -x
 

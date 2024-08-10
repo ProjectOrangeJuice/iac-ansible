@@ -4,7 +4,8 @@ services:
         image: vaultwarden/server:latest
         environment:
           LOG_FILE: "/data/logger.txt"
-          ADMIN_TOKEN:
+          SIGNUPS_ALLOWED: "false" 
+          #ADMIN_TOKEN: pin"
         volumes:
             - ./data/:/data
         ports:

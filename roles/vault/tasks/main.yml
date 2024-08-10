@@ -21,7 +21,8 @@
     group: vault
 
 - name: Run Docker Compose
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: /home/vault/bit
+    state: restarted
   become: true
   become_user: vault
