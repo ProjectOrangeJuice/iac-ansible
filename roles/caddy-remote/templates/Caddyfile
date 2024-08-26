@@ -5,6 +5,12 @@
     }
 }
 
+(logging) {
+    log {
+		output file /var/log/caddy/access.log
+	}
+}
+
 (reverse_proxy_forward) {
     reverse_proxy https://192.168.2.15:443 {
         transport http {
@@ -30,7 +36,7 @@
         }
         key basic
         events 60
-        window 1m
+        window 30s
     }
     log_key 
     }
@@ -48,6 +54,7 @@ gemini.{{domain_name}} {
     import rate_limit
     import reverse_proxy_forward
     import gateway
+    import logging
 }
 
 bit.{{domain_name}} {
@@ -61,6 +68,7 @@ bit.{{domain_name}} {
     import rate_limit
     import reverse_proxy_forward
     import gateway
+    import logging
 }
 
 home.{{domain_name}} {
@@ -74,6 +82,7 @@ home.{{domain_name}} {
     import rate_limit
     import reverse_proxy_forward
     import gateway
+    import logging
 }
 
 data.{{domain_name}} {
@@ -87,9 +96,11 @@ data.{{domain_name}} {
     import rate_limit
     import reverse_proxy_forward
     import gateway
+    import logging
 }
 
 unlock.{{domain_name}} {
+    import logging
     @geoblocked {
         import geo_details
     }
