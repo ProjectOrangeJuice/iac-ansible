@@ -13,10 +13,10 @@ server {
 resolver 192.168.18.1 valid=30s;
 
 # upstream backend {
-#    server homeassistant.local max_fails=0 fail_timeout=0; 
-#    server gateway.local max_fails=0 fail_timeout=0; 
-#    server data.local max_fails=0 fail_timeout=0; 
-#    server gemini-webfront.local max_fails=0 fail_timeout=0; 
+#    server homeassistant.localdomain max_fails=0 fail_timeout=0; 
+#    server gateway.localdomain max_fails=0 fail_timeout=0; 
+#    server data.localdomain max_fails=0 fail_timeout=0; 
+#    server gemini-webfront.localdomain max_fails=0 fail_timeout=0; 
 # }
 
 
@@ -31,7 +31,7 @@ server {
     client_max_body_size 1m;
    
     location  / {
-        proxy_pass         http://password-vault.local;
+        proxy_pass         http://password-vault.localdomain;
         proxy_http_version 1.1;
     # Set headers for proxying WebSocket
     proxy_set_header   Upgrade $http_upgrade;
@@ -64,7 +64,7 @@ server {
     location  / {
         proxy_connect_timeout 1s;  # Short initial connection timeout
         proxy_next_upstream error timeout; # Retry on errors and timeouts
-        proxy_pass         http://gemini-webfront.local:9090;
+        proxy_pass         http://gemini-webfront.localdomain:9090;
                proxy_http_version 1.1;
     # Set headers for proxying WebSocket
     proxy_set_header   Upgrade $http_upgrade;
@@ -125,7 +125,7 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 86400;
-        proxy_pass         http://homeassistant.local:8123;
+        proxy_pass         http://homeassistant.localdomain:8123;
         proxy_redirect     off;
         proxy_set_header   Host $host;
         proxy_set_header   X-Real-IP $remote_addr;
@@ -138,7 +138,7 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 86400;
-        proxy_pass         http://homeassistant.local:8123;
+        proxy_pass         http://homeassistant.localdomain:8123;
         proxy_redirect     off;
         proxy_set_header   Host $host;
         proxy_set_header   X-Real-IP $remote_addr;
@@ -169,7 +169,7 @@ gzip_types text/plain text/css application/json application/javascript text/xml 
    gzip_comp_level 9;
     
     location / {
-        proxy_pass http://data.local:11000$request_uri;
+        proxy_pass http://data.localdomain:11000$request_uri;
 
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Port $server_port;
