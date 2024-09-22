@@ -35,7 +35,7 @@
             method GET POST
         }
         key basic
-        events 60
+        events 120
         window 30s
     }
     log_key 
