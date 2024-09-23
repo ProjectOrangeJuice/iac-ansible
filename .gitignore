@@ -10,3 +10,5 @@ roles/caddy-remote/files/cert.crt
 roles/caddy-remote/files/gatewayDocker
 roles/caddy-remote/files/caddyImage
 roles/caddy-remote/files/GeoLite2-Country_20240730.tar.gz
+roles/authentik/tasks/env
+roles/authentik/files/env

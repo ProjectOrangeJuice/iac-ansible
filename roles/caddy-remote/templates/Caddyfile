@@ -36,7 +36,7 @@
         }
         key basic
         events 120
-        window 30s
+        window 15s
     }
     log_key 
     }
@@ -58,6 +58,20 @@ gemini.{{domain_name}} {
 }
 
 bit.{{domain_name}} {
+    @geoblocked {
+        import geo_details
+    }
+    handle @geoblocked {
+        respond "Access denied due to your location." 403
+    }
+
+    import rate_limit
+    import reverse_proxy_forward
+    import gateway
+    import logging
+}
+
+authentik.{{domain_name}} {
     @geoblocked {
         import geo_details
     }

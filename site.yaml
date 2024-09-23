@@ -8,11 +8,11 @@
     - wazuh-agent
   
 
-- hosts: wazuh
-  user: root
-  roles:
-    - upgrader
-    - wazuhMaster
+# - hosts: wazuh
+#   user: root
+#   roles:
+#     - upgrader
+#     - wazuhMaster
 
 - hosts: tunnel-nginx
   user: oharris
@@ -47,3 +47,11 @@
     - wazuh-agent
     - docker
     - vault
+
+- hosts: authentik
+  user: root
+  roles:
+    - upgrader
+    - wazuh-agent
+    - docker
+    - authentik
