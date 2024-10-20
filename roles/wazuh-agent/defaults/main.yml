@@ -1,1 +1,1 @@
-wazuh_address: "wazuh.local"
+wazuh_address: "wazuh.localdomain"
