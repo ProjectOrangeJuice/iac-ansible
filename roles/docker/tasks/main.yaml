@@ -1,3 +1,10 @@
+- name: Install curl and gpg
+  apt:
+    name:
+      - curl
+      - gnupg
+    state: present
+
 - name: Add Docker GPG apt Key
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
