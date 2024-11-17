@@ -88,38 +88,38 @@ server {
     ssl_certificate_key /etc/ssl/key.key;
 }
 
-server {
-    server_name gemini.{{ domain_name }};
+# server {
+#     server_name gemini.{{ domain_name }};
 
-    # Ignore the tunnel ip
-    set_real_ip_from 192.168.2.1; 
-    real_ip_header X-Forwarded-For;
+#     # Ignore the tunnel ip
+#     set_real_ip_from 192.168.2.1; 
+#     real_ip_header X-Forwarded-For;
 
-    location  / {
-        proxy_connect_timeout 1s;  # Short initial connection timeout
-        proxy_next_upstream error timeout; # Retry on errors and timeouts
-        proxy_pass         http://gemini-webfront.localdomain:9090;
-               proxy_http_version 1.1;
-    # Set headers for proxying WebSocket
-    proxy_set_header   Upgrade $http_upgrade;
-    proxy_set_header   Connection "upgrade";
-    proxy_redirect     http:// $scheme://;
+#     location  / {
+#         proxy_connect_timeout 1s;  # Short initial connection timeout
+#         proxy_next_upstream error timeout; # Retry on errors and timeouts
+#         proxy_pass         http://gemini-webfront.localdomain:9090;
+#                proxy_http_version 1.1;
+#     # Set headers for proxying WebSocket
+#     proxy_set_header   Upgrade $http_upgrade;
+#     proxy_set_header   Connection "upgrade";
+#     proxy_redirect     http:// $scheme://;
 
-    # Set proxy headers
-    proxy_set_header   X-Real-IP $remote_addr;
-    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header   X-Forwarded-Proto http;
+#     # Set proxy headers
+#     proxy_set_header   X-Real-IP $remote_addr;
+#     proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+#     proxy_set_header   X-Forwarded-Proto http;
 
-    # The proxy must preserve the host because screego verifies it with the origin
-    # for WebSocket connections
-    proxy_set_header   Host $http_host;
-    }
+#     # The proxy must preserve the host because screego verifies it with the origin
+#     # for WebSocket connections
+#     proxy_set_header   Host $http_host;
+#     }
 
 
-    listen 443;
-    ssl_certificate /etc/ssl/cert.crt; 
-    ssl_certificate_key /etc/ssl/key.key;
-}
+#     listen 443;
+#     ssl_certificate /etc/ssl/cert.crt; 
+#     ssl_certificate_key /etc/ssl/key.key;
+# }
 
 
 server {
