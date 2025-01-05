@@ -27,18 +27,18 @@
     - docker
     - nginx-tunneled
 
-# - hosts: remote
-#   user: oharris
-#   become: yes
-#   roles:
-#     # - upgrader
-#     # - wazuh-agent
-#     - docker
-#     - caddy-remote
-#   vars:
-#     wazuh_address: 192.168.2.5
-#   vars_files:
-#     - priv-vars.yaml
+- hosts: remote
+  user: oharris
+  become: yes
+  roles:
+    # - upgrader
+    # - wazuh-agent
+    # - docker
+    - caddy-remote
+  vars:
+    wazuh_address: 192.168.2.5
+  vars_files:
+    - priv-vars.yaml
 
 - hosts: vault
   user: root
