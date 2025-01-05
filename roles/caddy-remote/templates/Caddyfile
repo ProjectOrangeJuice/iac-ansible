@@ -122,8 +122,14 @@ unlock.{{domain_name}} {
         respond "Access denied due to your location." 403
     }
 
+    redir / /unlock 302
+
+    @allowed_paths {
+        path /css/*
+        path /unlock
+    }
+
     import rate_limit
-    rewrite * /unlock
     reverse_proxy caddy-project-gateway-1:9090 {
     }
 }
