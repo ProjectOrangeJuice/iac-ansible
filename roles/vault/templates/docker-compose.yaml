@@ -4,7 +4,8 @@ services:
         image: vaultwarden/server:latest
         environment:
           LOG_FILE: "/data/logger.txt"
-          SIGNUPS_ALLOWED: "false" 
+          SIGNUPS_ALLOWED: "false"
+          DOMAIN: https://bit.{{domain_name}}
           #ADMIN_TOKEN: pin"
         volumes:
             - ./data/:/data

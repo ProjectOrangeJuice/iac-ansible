@@ -14,7 +14,7 @@
     group: vault
 
 - name: Copy docker-compose.yaml file
-  copy:
+  template:
     src: docker-compose.yaml
     dest: /home/vault/bit/docker-compose.yaml
     owner: vault

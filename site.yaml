@@ -42,6 +42,8 @@
 
 - hosts: vault
   user: root
+  vars_files:
+    - priv-vars.yaml
   roles:
     - upgrader
     - wazuh-agent
