@@ -43,35 +43,8 @@
     
 }
 
-gemini.{{domain_name}} {
-    @geoblocked {
-        import geo_details
-    }
-    handle @geoblocked {
-        respond "Access denied due to your location." 403
-    }
-    
-    import rate_limit
-    import reverse_proxy_forward
-    import gateway
-    import logging
-}
 
 bit.{{domain_name}} {
-    @geoblocked {
-        import geo_details
-    }
-    handle @geoblocked {
-        respond "Access denied due to your location." 403
-    }
-
-    import rate_limit
-    import reverse_proxy_forward
-    import gateway
-    import logging
-}
-
-authentik.{{domain_name}} {
     @geoblocked {
         import geo_details
     }
