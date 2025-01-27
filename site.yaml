@@ -63,3 +63,13 @@
   roles:
     - upgrader
     - docker
+
+- hosts: swarm
+  user: oharris
+  become: yes
+  become_user: root
+  roles:
+    - upgrader
+    - wazuh-agent
+    - docker
+    - guest-agent
