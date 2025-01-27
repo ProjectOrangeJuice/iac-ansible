@@ -7,4 +7,6 @@ services:
       - "3001:3001"
     volumes:
       - /mnt/nfs/uptime-kuma:/app/data # allows image to popup on any node
+    labels:
+      - "traefik.http.routers.uptime.rule=Host(`uptime.swarm.com`)"
     restart: always
