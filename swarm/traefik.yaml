@@ -1,11 +1,16 @@
-version: '3'
+version: '3.9'
 
 services:
   reverse-proxy:
     # The official v3 Traefik docker image
     image: traefik:v3.3
+    # Only run this on manager
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
     # Enables the web UI and tells Traefik to listen to docker
-    command: --api.insecure=true --providers.docker
+    command: --api.insecure=true --docker --docker.swarmMode --docker.watch --log.level=DEBUG
     ports:
       # The HTTP port
       - "80:80"
