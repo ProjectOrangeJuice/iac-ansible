@@ -78,8 +78,11 @@
   user: oharris
   become: yes
   become_user: root
+  vars:
+    docker_user: oharris
   roles:
     - upgrader
     - wazuh-agent
     - docker
     - guest-agent
+    - gitea

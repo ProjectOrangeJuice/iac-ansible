@@ -1,0 +1,34 @@
+- name: Create gitea folders
+  file:
+    path: /home/oharris/gitea
+    state: directory
+    owner: oharris
+    group: oharris
+
+- name: Copy docker-compose.yaml file
+  copy:
+    src: docker-compose.yaml
+    dest: /home/oharris/gitea/docker-compose.yaml
+    owner: oharris
+    group: oharris
+
+- name: Stop gitea
+  shell: docker compose down
+  become: true
+  become_user: oharris
+  args:
+    chdir: /home/oharris/gitea
+
+- name: Restart Gitea and pull latest image
+  shell: docker compose pull
+  become: true
+  become_user: oharris
+  args:
+    chdir: /home/oharris/gitea
+
+- name: Run Docker Compose
+  shell: docker compose up -d 
+  become: true
+  become_user: oharris
+  args:
+    chdir: /home/oharris/gitea
