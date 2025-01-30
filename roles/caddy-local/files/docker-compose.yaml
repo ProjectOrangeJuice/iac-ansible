@@ -1,0 +1,14 @@
+services:
+  project-caddy:
+    network_mode: host
+    image: caddy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /home/oharris/caddy/config:/config
+      - /home/oharris/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /home/oharris/caddy/data:/data
+      - /var/log/caddy:/var/log/caddy
+      - /home/oharris/caddy/ssl:/ssl
+    restart: always

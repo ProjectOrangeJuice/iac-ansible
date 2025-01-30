@@ -26,6 +26,7 @@
     - wazuh-agent
     - docker
     - nginx-tunneled
+    # - caddy-local
 
 - hosts: remote
   user: oharris

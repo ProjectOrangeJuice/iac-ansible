@@ -1,0 +1,69 @@
+- name: Create caddy folders
+  file:
+    path: /home/oharris/caddy
+    state: directory
+    owner: oharris
+    group: oharris
+
+- name: Create caddy ssl folder
+  file:
+    path: /home/oharris/caddy/ssl
+    state: directory
+    owner: oharris
+    group: oharris
+
+- name: Create directory for caddy config
+  file:
+    path: /home/oharris/caddy/config
+    state: directory
+    owner: oharris
+    group: oharris
+
+- name: Copy conf
+  template:
+    src: Caddyfile
+    dest: /home/oharris/caddy/Caddyfile
+    owner: oharris
+    group: oharris
+
+- name: Copy docker-compose.yaml file
+  copy:
+    src: docker-compose.yaml
+    dest: /home/oharris/caddy/docker-compose.yaml
+    owner: oharris
+    group: oharris
+
+- name: Copy ssl key
+  copy:
+    src: key.key
+    dest: /home/oharris/caddy/ssl/key.key
+    owner: oharris
+    group: oharris
+
+- name: Copy ssl cert file
+  copy:
+    src: cert.crt
+    dest: /home/oharris/caddy/ssl/cert.crt
+    owner: oharris
+    group: oharris
+
+- name: Stop caddy
+  shell: docker compose down
+  become: true
+  become_user: oharris
+  args:
+    chdir: /home/oharris/caddy
+
+- name: Restart caddy and pull latest image
+  shell: docker compose pull
+  become: true
+  become_user: oharris
+  args:
+    chdir: /home/oharris/caddy
+
+- name: Run Docker Compose
+  shell: docker compose up -d 
+  become: true
+  become_user: oharris
+  args:
+    chdir: /home/oharris/caddy
