@@ -51,30 +51,6 @@
     - docker
     - vault
 
-# - hosts: authentik
-#   user: root
-#   roles:
-#     - upgrader
-#     - wazuh-agent
-#     - docker
-#     - authentik
-
-- hosts: uptime
-  user: root
-  roles:
-    - upgrader
-    - docker
-
-- hosts: swarm
-  user: oharris
-  become: yes
-  become_user: root
-  roles:
-    - upgrader
-    - wazuh-agent
-    - docker
-    - guest-agent
-
 - hosts: gitea
   user: oharris
   become: yes
