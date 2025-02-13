@@ -106,3 +106,8 @@ unlock.{{domain_name}} {
     reverse_proxy caddy-project-gateway-1:9090 {
     }
 }
+
+{{static_domain}} {
+  root * /var/www/html
+  file_server
+}

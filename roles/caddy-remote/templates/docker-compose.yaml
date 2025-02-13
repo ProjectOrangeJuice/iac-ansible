@@ -9,6 +9,7 @@ services:
       - /home/oharris/caddy/Caddyfile:/etc/caddy/Caddyfile
       - /home/oharris/caddy/data:/data
       - /var/log/caddy:/var/log/caddy
+      - /var/www/html:/var/www/html
     restart: always
   project-gateway:
     image: gateway
