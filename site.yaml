@@ -1,52 +1,3 @@
-- hosts: nextcloud
-  user: root
-  roles:
-    - upgrader
-    - guest-agent
-    - docker
-    - nextcloud
-  
-
-# - hosts: wazuh
-#   user: root
-#   roles:
-#     - upgrader
-#     - wazuhMaster
-
-- hosts: tunnel-nginx
-  user: oharris
-  become: true
-  become_user: root
-  vars_files:
-    - priv-vars.yaml
-  roles:
-    - upgrader
-    - guest-agent
-    - docker
-    - nginx-tunneled
-    # - caddy-local
-
-- hosts: remote
-  user: oharris
-  become: yes
-  roles:
-    - upgrader
-    - docker
-    - caddy-remote
-  vars:
-    wazuh_address: 192.168.2.5
-  vars_files:
-    - priv-vars.yaml
-
-- hosts: vault
-  user: root
-  vars_files:
-    - priv-vars.yaml
-  roles:
-    - upgrader
-    - docker
-    - vault
-
 - hosts: gitea
   user: oharris
   become: yes
@@ -58,3 +9,12 @@
     - docker
     - guest-agent
     - gitea
+
+- hosts: vault
+  user: root
+  vars_files:
+    - priv-vars.yaml
+  roles:
+    - upgrader
+    - docker
+    - vault

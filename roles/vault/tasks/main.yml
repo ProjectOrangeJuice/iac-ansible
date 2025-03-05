@@ -20,9 +20,23 @@
     owner: vault
     group: vault
 
+- name: Stop vault
+  shell: docker compose down
+  args:
+    chdir: /home/vault/bit
+  become: true
+  become_user: vault
+
+- name: Restart vault and pull latest image
+  shell: docker compose pull
+  args:
+    chdir: /home/vault/bit
+  become: true
+  become_user: vault
+
 - name: Run Docker Compose
-  community.docker.docker_compose_v2:
-    project_src: /home/vault/bit
-    state: restarted
+  shell: docker compose up -d 
+  args:
+    chdir: /home/vault/bit
   become: true
   become_user: vault
