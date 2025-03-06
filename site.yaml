@@ -18,3 +18,15 @@
     - upgrader
     - docker
     - vault
+
+- hosts: casa
+  roles:
+    - upgrader
+    - docker
+
+- hosts: pihole
+  roles:
+    - upgrader
+  tasks:
+    - name: Update pihole
+      shell: pihole -up
