@@ -20,8 +20,11 @@
     - vault
 
 - hosts: casa
+  user: oharris
+  become: true
   roles:
     - upgrader
+    - guest-agent
     - docker
 
 - hosts: pihole
@@ -30,3 +33,14 @@
   tasks:
     - name: Update pihole
       shell: pihole -up
+
+- hosts: caddy
+  become: true
+  user: oharris
+  vars_files:
+    - priv-vars.yaml
+  roles:
+    - upgrader
+    - guest-agent
+    - docker
+    - caddy-local

@@ -6,37 +6,17 @@
   }
 }
 
-bit.{{domain_name}} {
+
+mealie.lemon.com {
     tls internal
-    reverse_proxy http://password-vault.localdomain {
+    reverse_proxy http://casa:9925 {
         header_up X-Forwarded-For {remote}
     }
 }
 
-audit.{{domain_name}} {
+memo.lemon.com {
     tls internal
-    reverse_proxy http://192.168.2.1:9090 {
-        header_up X-Forwarded-For {remote}
-    }
-}
-
-home.{{domain_name}} {
-    tls internal
-    reverse_proxy http://homeassistant.localdomain:8123 {
-        header_up X-Forwarded-For {remote}
-    }
-}
-
-data.{{domain_name}} {
-    tls internal
-    reverse_proxy http://data.localdomain:11000 {
-        header_up X-Forwarded-For {remote}
-    }
-}
-
-gitlab.{{domain_name}} {
-    tls internal
-    reverse_proxy http://gitea.localdomain {
+    reverse_proxy http://casa:5230 {
         header_up X-Forwarded-For {remote}
     }
 }
