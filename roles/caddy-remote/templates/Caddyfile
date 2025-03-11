@@ -72,20 +72,6 @@ home.{{domain_name}} {
     import logging
 }
 
-data.{{domain_name}} {
-    @geoblocked {
-        import geo_details
-    }
-    handle @geoblocked {
-        respond "Access denied due to your location." 403
-    }
-
-    import rate_limit
-    import reverse_proxy_forward
-    import gateway
-    import logging
-}
-
 unlock.{{domain_name}} {
     import logging
     @geoblocked {
